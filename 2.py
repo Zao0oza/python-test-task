@@ -2,8 +2,12 @@ from functools import wraps
 
 
 def cls_method_decorator(param: int):
-    pass
-
+    def decorator(func):
+        def wrapper(self, *args, **kwargs):
+            self.increment_var(param)
+            func(self, *args, **kwargs)
+        return wrapper
+    return decorator
 
 class SomeClass:
     some_var: int
@@ -14,7 +18,7 @@ class SomeClass:
     def increment_var(self, increment: int):
         self.some_var += increment
 
-    @cls_method_decorator(param=30)
+    @cls_method_decorator(30)
     def some_func(self, condition=None):
         print(self.some_var)
 
